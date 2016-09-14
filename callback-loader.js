@@ -49,6 +49,9 @@ module.exports = function (source) {
 					value = value.replace(/([{,])(?:\s*)([A-Za-z0-9_\-]+?)\s*:/g, '$1"$2":');
 					value = JSON.parse(value);
 					return value;
+				} else if (argument.type == "FunctionExpression") {
+					var value = escodegen.generate(argument, {format: {json: true}});
+					return value;
 				} else {
 					var msg = 'Error when parsing arguments of function ' + funcName + '. Only absolute values accepted. Index: ' + argument.range[0];
 					console.error(msg);
