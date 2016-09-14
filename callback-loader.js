@@ -52,6 +52,13 @@ module.exports = function (source) {
 				} else if (argument.type == "FunctionExpression") {
 					var value = escodegen.generate(argument, {format: {json: true}});
 					return value;
+				} else if (argument.type == "BinaryExpression") {
+					// E.G.: __dirname + "/modules/*.js"
+					var left = argument.left.value;
+					if (argument.left.name == "__dirname")
+						left = path.normalize(path.dirname(self.resource)).replace(/\\/g, "/");
+
+					return left + argument.right.value;
 				} else {
 					var msg = 'Error when parsing arguments of function ' + funcName + '. Only absolute values accepted. Index: ' + argument.range[0];
 					console.error(msg);
